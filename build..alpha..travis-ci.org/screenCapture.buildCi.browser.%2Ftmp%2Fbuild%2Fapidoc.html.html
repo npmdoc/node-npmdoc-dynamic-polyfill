@@ -1,0 +1,157 @@
+<html><head></head><body><div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a>dynamic-polyfill (v1.0.0)</a>
+</h1>
+<h4>Dynamically polyfill only when needed by the browser. Complementary to Polyfill.io</h4>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.dynamic-polyfill">module dynamic-polyfill</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.dynamic-polyfill.dynamic-polyfill">
+            function <span class="apidocSignatureSpan"></span>dynamic-polyfill
+            <span class="apidocSignatureSpan">(_ref)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.dynamic-polyfill" id="apidoc.module.dynamic-polyfill">module dynamic-polyfill</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.dynamic-polyfill.dynamic-polyfill" id="apidoc.element.dynamic-polyfill.dynamic-polyfill">
+        function <span class="apidocSignatureSpan"></span>dynamic-polyfill
+        <span class="apidocSignatureSpan">(_ref)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function polyfill(_ref) {
+    var fills = _ref.fills,
+        _ref$options = _ref.options,
+        options = _ref$options === undefined ? '' : _ref$options,
+        _ref$minify = _ref.minify,
+        minify = _ref$minify === undefined ? true : _ref$minify,
+        _ref$rum = _ref.rum,
+        rum = _ref$rum === undefined ? true : _ref$rum,
+        afterFill = _ref.afterFill;
+
+
+    var needsPolyfill = []; // contains list of all to be polyfilled features
+
+
+    // check if 'always' flag is set
+    // if yes, no need to check for support since polyfills are loaded anyway
+    if (options.indexOf('always') === -1) {
+
+        if (fills !== undefined) {
+
+            fills.forEach(function (fill) {
+
+                // set the fill against the window object
+                var reducedFill = fill.split('.').reduce(function (k, v) {
+                    return k[v];
+                }, window);
+
+                // check if window supports the fill
+                if (reducedFill === undefined) {
+                    needsPolyfill.push(fill);
+                }
+            });
+
+            // if no polyfills are needed, run callback
+            if (needsPolyfill.length === 0) {
+                afterFill();
+                return;
+            }
+        }
+    } else {
+        needsPolyfill = fills;
+    }
+
+    var min = minify ? '.min' : '',
+        features = fills ? 'features=' + needsPolyfill.join(',') : '',
+        flags = options ? '&amp;flags=' + options.join(',') : '',
+        monitor = rum ? '\&amp;rum=1' : '',
+        // not set to rum=0 since it loads scripts anyway
+
+    js = document.createElement('script');
+
+    js.src = 'https://cdn.polyfill.io/v2/polyfill' + min + '.js?' + (features + flags + monitor);
+    js.async = true;
+
+    document.body.appendChild(js);
+
+    js.onload = function () {
+        return afterFill();
+    };
+    js.onerror = function () {
+        return afterFill(new Error('Failed to load polyfill. Please write an issue here: https://github.com/PascalAOMS/dynamic-polyfill
+/issues', js.src));
+    };
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
+</body></html>
